@@ -19,20 +19,27 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.user_id', auth()->id())
-            ->where('requests.status', 'COMPLETED')
+            ->whereIn('requests.status', ['COMPLETED', 'REJECTED'])
+            ->orderBy('requests.id', 'desc')
             ->get();
 
             return DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('action', function ($row) {
-                        return "<a href='/developer-request-complated/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $buttons = "<a href='/developer-request-complated/{$row->id}/detail' class='btn btn-primary btn-sm'>Detail</a>";
+
+                    if ($row->status === 'REJECTED') {
+                        $buttons .= "<a href='/developer-request-complated/{$row->id}/edit' class='btn btn-warning btn-sm ml-1'>Edit</a>";
                     }
 
+                    return $buttons;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
         return view('request.reqcomplated', [
-            'title' => "Request Complate"
+            'title' => "Request Completed"
         ]);
     }
 
@@ -45,19 +52,29 @@ class RequestController extends Controller
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.user_id', auth()->id())
             ->whereIn('requests.status', ['WAITING', 'ON PROGRESS'])
+            ->orderBy('requests.id', 'desc')
             ->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
-                        return "<a href='/developer-request-onprogress/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                        $buttons = "<a href='/developer-request-onprogress/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                  
+                        if ($row->status === 'WAITING') {
+                            $buttons .= "<a href='/developer-request-onprogress/{$row->id}/edit' class='btn btn-warning btn-sm ml-1'>Edit</a>";
+                            $buttons .= "<form action='/developer-request-onprogress/{$row->id}/delete' method='POST' class='d-inline'>
+                                            <button type='submit' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure?\")'>Delete</button>
+                                        </form>";
+                        }
+
+                        return $buttons;
                     })
                     ->rawColumns(['action'])
                     ->make(true);
                     }
 
         return view('request.reqonprogress', [
-            'title' => "Request on progress"
+            'title' => "Request On Progress"
         ]);
     }
 
@@ -74,6 +91,7 @@ class RequestController extends Controller
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('request_types.role_id', $userRoles)
             ->where('requests.status', 'WAITING')
+            ->orderBy('requests.id', 'asc')
             ->get();
 
             return DataTables::of($data)
@@ -87,7 +105,7 @@ class RequestController extends Controller
                     }
 
         return view('request.agentreqavailable', [
-            'title' => "Agent Requests Available"
+            'title' => "Requests Available"
         ]);
     }
 
@@ -104,6 +122,7 @@ class RequestController extends Controller
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.pic', $userpic)
             ->where('requests.status', 'ON PROGRESS')
+            ->orderBy('requests.id', 'asc')
             ->get();
 
             return DataTables::of($data)
@@ -116,7 +135,7 @@ class RequestController extends Controller
                     }
 
         return view('request.agentreqonprogress', [
-            'title' => "Agent Requests Onprogress"
+            'title' => "Requests On Progress"
         ]);
     }
 
@@ -132,7 +151,8 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.pic', $userpic)
-            ->where('requests.status', 'COMPLETED')
+            ->whereIn('requests.status', ['COMPLETED', 'REJECTED'])
+            ->orderBy('requests.id', 'desc')
             ->get();
 
             return DataTables::of($data)
@@ -145,7 +165,7 @@ class RequestController extends Controller
                     }
 
         return view('request.agentreqcomplated', [
-            'title' => "Agent Requests Complated"
+            'title' => "Requests Completed"
         ]);
     }
 
@@ -170,12 +190,65 @@ class RequestController extends Controller
         $data = DB::table('requests')
             ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
             ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
             ->join('request_details', 'requests.id', '=', 'request_details.request_id')
-            ->select('request_details.*', 'request_types.request_type_name', 'requests.status', 'requests.request_date', 'requests.collect_date', 'requests.result', 'requests.result_file', 'requests.note', 'users.name', 'users.email')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date', 
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
             ->where('request_details.request_id', $id)
             ->first();
         return view('request.agentdetailonprogress', [
-            'title' => "Agent detail onprogress",
+            'title' => "Detail Request On Progress",
+            'data' => $data
+        ]);
+    }
+
+    public function agentdetailavailable($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'users.name', 
+                    'users.email')
+            ->where('request_details.request_id', $id)
+            ->first();
+        return view('request.agentdetailavailable', [
+            'title' => "Detail Request Available",
+            'data' => $data
+        ]);
+    }
+
+    public function devdetailonprogress($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->leftJoin('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+        return view('request.devdetailonprogress', [
+            'title' => "Detail Request On Progress",
             'data' => $data
         ]);
     }

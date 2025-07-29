@@ -30,7 +30,8 @@
                             </tr>
                         </table>
 
-                         <h6 class="mb-3">Data Penanggung Jawab</h6>
+                        @if($data->pic_name || $data->pic_email)
+                        <h6 class="mb-3">Data Penanggung Jawab</h6>
                         <table class="table table-bordered">
                             <tr>
                                 <th width="30%">Name</th>
@@ -41,6 +42,7 @@
                                 <td>{{$data->pic_email}}</td>
                             </tr>
                         </table>
+                        @endif
 
                         <h6 class="mb-3">Status Permintaan</h6>
                         <table class="table table-bordered">
@@ -234,21 +236,9 @@
                         </table>
 
                         <div class="mt-4 d-flex justify-content-end">
-                            <a href="{{ url('agent-request-onprogress') }}" class="btn btn-secondary">
+                            <a href="{{ url('developer-request-onprogress') }}" class="btn btn-secondary">
                                 Back
                             </a>
-
-                            <form>
-                                <button type="submit" class="btn btn-primary mx-1">
-                                    Completed Request
-                                </button>
-                            </form>
-
-                            <form>
-                                <button type="submit" class="btn btn-danger">
-                                    Reject Request
-                                </button>
-                            </form>
                         </div>
                     </div>
                 </div>

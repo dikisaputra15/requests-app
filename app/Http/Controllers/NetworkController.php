@@ -7,9 +7,91 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Requests;
 use App\Models\RequestDetail;
 use Carbon\Carbon;
+use Yajra\DataTables\Facades\DataTables;
 
 class NetworkController extends Controller
 {
+     public function reqcompleted(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'IT Network')
+            ->whereIn('requests.status', ['COMPLETED', 'REJECTED'])
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/network-completed/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('network.reqcompleted', [
+            'title' => "Network Completed"
+        ]);
+    }
+
+    public function reqonprogress(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'IT Network')
+            ->where('requests.status', 'ON PROGRESS')
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/network-onprogress/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('network.reqonprogress', [
+            'title' => "Network On Progress"
+        ]);
+    }
+
+    public function reqavailable(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'IT Network')
+            ->where('requests.status', 'WAITING')
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/network-available/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('network.reqavailable', [
+            'title' => "Network Available"
+        ]);
+    }
+
      public function formaddressip()
     {
         $reqtypes = DB::table('request_types')->get();

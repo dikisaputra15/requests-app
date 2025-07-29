@@ -24,6 +24,18 @@ Route::post('/users/{user}/update-role', [UserController::class, 'updateRole'])-
 Route::resource('infrastructure-complated', InfrastructureController::class)->middleware(['auth']);
 Route::get('infrastructure-onprogress', [InfrastructureController::class, 'onprogress'])->middleware(['auth']);
 Route::get('infrastructure-available', [InfrastructureController::class, 'available'])->middleware(['auth']);
+Route::get('network-completed', [NetworkController::class, 'reqcompleted'])->middleware(['auth']);
+Route::get('network-onprogress', [NetworkController::class, 'reqonprogress'])->middleware(['auth']);
+Route::get('network-available', [NetworkController::class, 'reqavailable'])->middleware(['auth']);
+Route::get('architecture-completed', [ArchitectureController::class, 'reqcompleted'])->middleware(['auth']);
+Route::get('architecture-onprogress', [ArchitectureController::class, 'reqonprogress'])->middleware(['auth']);
+Route::get('architecture-available', [ArchitectureController::class, 'reqavailable'])->middleware(['auth']);
+Route::get('devsecops-available', [DevsecopsController::class, 'reqavailable'])->middleware(['auth']);
+Route::get('devsecops-onprogress', [DevsecopsController::class, 'reqonprogress'])->middleware(['auth']);
+Route::get('devsecops-completed', [DevsecopsController::class, 'reqcompleted'])->middleware(['auth']);
+Route::get('dbadministrator-completed', [DbadministratorController::class, 'reqcompleted'])->middleware(['auth']);
+Route::get('dbadministrator-onprogress', [DbadministratorController::class, 'reqonprogress'])->middleware(['auth']);
+Route::get('dbadministrator-available', [DbadministratorController::class, 'reqavailable'])->middleware(['auth']);
 Route::get('form-spec-upgrade', [InfrastructureController::class, 'formspecup'])->middleware(['auth']);
 Route::get('form-soft-install', [InfrastructureController::class, 'formsoftinstall'])->middleware(['auth']);
 Route::get('form-address-ip', [NetworkController::class, 'formaddressip'])->middleware(['auth']);
@@ -36,6 +48,7 @@ Route::get('form-query-exec', [DbadministratorController::class, 'formqueryexec'
 Route::get('form-data-retrieval', [DbadministratorController::class, 'formdataretrieval'])->middleware(['auth']);
 Route::get('developer-request-complated', [RequestController::class, 'reqcomplated'])->middleware(['auth']);
 Route::get('developer-request-onprogress', [RequestController::class, 'reqonprogress'])->middleware(['auth']);
+Route::get('developer-request-onprogress/{id}/detail', [RequestController::class, 'devdetailonprogress'])->middleware(['auth']);
 Route::post('proses-formspec', [InfrastructureController::class, 'saveformspec'])->middleware(['auth']);
 Route::post('proses-formsoft', [InfrastructureController::class, 'saveformsoft'])->middleware(['auth']);
 Route::post('proses-formipaddress', [NetworkController::class, 'saveformipaddress'])->middleware(['auth']);
@@ -51,5 +64,5 @@ Route::get('agent-request-onprogress', [RequestController::class, 'agentreqonpro
 Route::get('agent-request-complated', [RequestController::class, 'agentreqcomplated'])->middleware(['auth']);
 Route::get('agent-request-available/{id}/asign', [RequestController::class, 'agentasignreq'])->middleware(['auth']);
 Route::get('agent-request-onprogress/{id}/detail', [RequestController::class, 'agentdetailonprogress'])->middleware(['auth']);
-
+Route::get('agent-request-available/{id}/detail', [RequestController::class, 'agentdetailavailable'])->middleware(['auth']);
 

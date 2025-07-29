@@ -7,9 +7,91 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Requests;
 use App\Models\RequestDetail;
 use Carbon\Carbon;
+use Yajra\DataTables\Facades\DataTables;
 
 class DevsecopsController extends Controller
 {
+     public function reqcompleted(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'DevSecOps')
+            ->whereIn('requests.status', ['COMPLETED', 'REJECTED'])
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/devsecops-completed/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('devsecops.reqcompleted', [
+            'title' => "DevSecOps Completed"
+        ]);
+    }
+
+    public function reqonprogress(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'DevSecOps')
+            ->where('requests.status', 'ON PROGRESS')
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/devsecops-onprogress/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('devsecops.reqonprogress', [
+            'title' => "DevSecOps On Progress"
+        ]);
+    }
+
+    public function reqavailable(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'DevSecOps')
+            ->where('requests.status', 'WAITING')
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/devsecops-available/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('devsecops.reqavailable', [
+            'title' => "DevSecOps Available"
+        ]);
+    }
+
     public function formsecscan()
     {
         $reqtypes = DB::table('request_types')->get();

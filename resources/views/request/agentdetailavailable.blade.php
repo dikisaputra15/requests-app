@@ -30,18 +30,6 @@
                             </tr>
                         </table>
 
-                         <h6 class="mb-3">Data Penanggung Jawab</h6>
-                        <table class="table table-bordered">
-                            <tr>
-                                <th width="30%">Name</th>
-                                <td>{{$data->pic_name}}</td>
-                            </tr>
-                            <tr>
-                                <th>Email</th>
-                                <td>{{$data->pic_email}}</td>
-                            </tr>
-                        </table>
-
                         <h6 class="mb-3">Status Permintaan</h6>
                         <table class="table table-bordered">
                             <tr>
@@ -66,11 +54,6 @@
                             <tr>
                                 <th>Tanggal Request</th>
                                 <td>{{ $data->request_date }}</td>
-                            </tr>
-
-                            <tr>
-                                <th>Tanggal Ambil Request</th>
-                                <td>{{ $data->collect_date }}</td>
                             </tr>
                         </table>
 
@@ -234,21 +217,9 @@
                         </table>
 
                         <div class="mt-4 d-flex justify-content-end">
-                            <a href="{{ url('agent-request-onprogress') }}" class="btn btn-secondary">
+                            <a href="{{ url('agent-request-available') }}" class="btn btn-secondary">
                                 Back
                             </a>
-
-                            <form>
-                                <button type="submit" class="btn btn-primary mx-1">
-                                    Completed Request
-                                </button>
-                            </form>
-
-                            <form>
-                                <button type="submit" class="btn btn-danger">
-                                    Reject Request
-                                </button>
-                            </form>
                         </div>
                     </div>
                 </div>

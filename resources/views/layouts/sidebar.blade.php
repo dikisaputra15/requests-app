@@ -31,7 +31,7 @@
                             aria-hidden="true"></i>
                         <span>IT Infrastruktur</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="{{ url('infrastructure-complated') }}">Request Complated</a></li>
+                        <li><a class="nav-link" href="{{ url('infrastructure-complated') }}">Request Completed</a></li>
                     </ul>
                     <ul class="dropdown-menu">
                         <li><a class="nav-link" href="{{ url('infrastructure-onprogress') }}">Request On Progress</a></li>
@@ -46,13 +46,13 @@
                             aria-hidden="true"></i>
                         <span>IT Network</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Complated</a></li>
+                        <li><a class="nav-link" href="{{ url('network-completed') }}">Request Completed</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request On Progress</a></li>
+                        <li><a class="nav-link" href="{{ url('network-onprogress') }}">Request On Progress</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Available</a></li>
+                        <li><a class="nav-link" href="{{ url('network-available') }}">Request Available</a></li>
                     </ul>
                 </li>
                 <li
@@ -61,13 +61,13 @@
                             aria-hidden="true"></i>
                         <span>IT Architecture</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Complated</a></li>
+                        <li><a class="nav-link" href="{{ url('architecture-completed') }}">Request Completed</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request On Progress</a></li>
+                        <li><a class="nav-link" href="{{ url('architecture-onprogress') }}">Request On Progress</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Available</a></li>
+                        <li><a class="nav-link" href="{{ url('architecture-available') }}">Request Available</a></li>
                     </ul>
                 </li>
                 <li
@@ -76,13 +76,13 @@
                             aria-hidden="true"></i>
                         <span>DevSecOps</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Complated</a></li>
+                        <li><a class="nav-link" href="{{ url('devsecops-completed') }}">Request Completed</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request On Progress</a></li>
+                        <li><a class="nav-link" href="{{ url('devsecops-onprogress') }}">Request On Progress</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Available</a></li>
+                        <li><a class="nav-link" href="{{ url('devsecops-available') }}">Request Available</a></li>
                     </ul>
                 </li>
                 <li
@@ -91,13 +91,13 @@
                             aria-hidden="true"></i>
                         <span>Database Administrator</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Complated</a></li>
+                        <li><a class="nav-link" href="{{ url('dbadministrator-completed') }}">Request Completed</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request On Progress</a></li>
+                        <li><a class="nav-link" href="{{ url('dbadministrator-onprogress') }}">Request On Progress</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Available</a></li>
+                        <li><a class="nav-link" href="{{ url('dbadministrator-available') }}">Request Available</a></li>
                     </ul>
                 </li>
 
@@ -177,7 +177,7 @@
                 <li class="menu-header">Your Request</li>
                  <li class="nav-item">
                     <a href="{{ url('developer-request-complated') }}" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests Complated</span>
+                        <span>Requests Completed</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -198,7 +198,7 @@
                 <li class="menu-header">Your Request</li>
                  <li class="nav-item">
                     <a href="{{ url('agent-request-complated') }}" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests Complated</span>
+                        <span>Requests Completed</span>
                     </a>
                 </li>
                 <li class="nav-item">
